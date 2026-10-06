@@ -25,7 +25,8 @@ hotel-pms-v2/
 │   ├── requirements/
 │   ├── architecture/
 │   ├── database/
-│   └── api/
+│   ├── api/
+│   └── development/
 ├── src/
 │   ├── HotelPms.Domain/
 │   ├── HotelPms.Application/
