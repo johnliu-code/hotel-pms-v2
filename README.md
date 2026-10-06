@@ -1,2 +1,1 @@
-# hotel-pms-v2
-A modern, API-first Property Management System (PMS) for small and mid-sized hotels, motels, inns, and short-term rentals, built with .NET, MAUI, and React.
+Hotel PMS 2.0 is a modern, API-first Property Management System designed initially for small and mid-sized hotels, motels, inns, and short-term rental operators. Built with .NET, ASP.NET Core, .NET MAUI, and React, the project focuses on reservation management, room availability, guest operations, housekeeping, billing, multi-channel booking management, and secure remote access. Its modular and integration-ready architecture is designed to support future growth, including external booking platforms, channel managers, and larger hotel operations.
