@@ -111,3 +111,7 @@ Future integrations with booking platforms, channel managers, and external PMS p
 ## Source control and secrets
 
 HPMS-17 work belongs on `feature/HPMS-17-solution-skeleton` and is reviewed before merging. Do not commit secrets, certificates, signing material, local environment files, or build outputs. Future server credentials should use user secrets or deployment secret storage; never embed credentials in either client.
+
+## Development standards
+
+Follow the [development standards and Definition of Done](docs/development/DEVELOPMENT_STANDARDS.md) for source control, architecture, testing, review, AI-assisted development, and documentation requirements.
