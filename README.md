@@ -26,7 +26,8 @@ hotel-pms-v2/
 │   ├── architecture/
 │   ├── database/
 │   ├── api/
-│   └── development/
+│   ├── development/
+│   └── security/
 ├── src/
 │   ├── HotelPms.Domain/
 │   ├── HotelPms.Application/
@@ -112,6 +113,8 @@ Future integrations with booking platforms, channel managers, and external PMS p
 ## Source control and secrets
 
 HPMS-17 work belongs on `feature/HPMS-17-solution-skeleton` and is reviewed before merging. Do not commit secrets, certificates, signing material, local environment files, or build outputs. Future server credentials should use user secrets or deployment secret storage; never embed credentials in either client.
+
+See the [security and payment-data boundaries](docs/security/SECURITY_AND_PAYMENT_BOUNDARIES.md) for the backend security baseline, protected data, payment handling, and integration requirements.
 
 ## Development standards
 
