@@ -1,3 +1,5 @@
 # Unit tests
 
-Reserved for Domain and Application logic. No business logic exists yet, so no placeholder tests are included. Add meaningful tests alongside future use cases and domain rules.
+Focused Domain tests cover Money/Currency validation, normalization, equality, hashing, and exact decimal preservation. Add meaningful tests alongside future use cases and domain rules.
+
+From the repository root, run `dotnet test tests/HotelPms.UnitTests --configuration Release`.

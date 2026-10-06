@@ -4,7 +4,7 @@ Hotel PMS 2.0 is a modern, API-first Property Management System designed initial
 
 ## Goals and target users
 
-Build an API-first property management system for small and mid-sized hotels, motels, inns, and short-term rental operators. Future capabilities include reservations, availability, guest operations, housekeeping, billing, and multi-channel booking. HPMS-17 establishes a buildable foundation only; no business features are implemented.
+Build an API-first property management system for small and mid-sized hotels, motels, inns, and short-term rental operators. Future capabilities include reservations, availability, guest operations, housekeeping, billing, and multi-channel booking. HPMS-17 established the buildable foundation; HPMS-20 adds shared Domain primitives without implementing business entities or workflows.
 
 ## Architecture and technology
 
@@ -44,7 +44,7 @@ hotel-pms-v2/
 └── .gitignore
 ```
 
-`HotelPms.sln` contains the four backend projects and two test projects. MAUI and Web are built independently so backend development does not require native client workloads. Domain/Application/Infrastructure contain no placeholder business classes. UnitTests is reserved for future domain rules and use cases; IntegrationTests currently exercises API health and OpenAPI. Persistence and infrastructure tests will accompany actual implementations. Running the solution test command currently reports no tests in UnitTests; the two real API integration tests execute in IntegrationTests.
+`HotelPms.sln` contains the four backend projects and two test projects. MAUI and Web are built independently so backend development does not require native client workloads. Domain contains reservation lifecycle and room operational status types plus immutable Money/Currency values; see the [domain decisions](docs/architecture/DOMAIN_DECISIONS.md). Application/Infrastructure contain no placeholder business classes. UnitTests exercises Money/Currency invariants; IntegrationTests contains two API health/OpenAPI tests. Persistence and infrastructure tests will accompany actual implementations.
 
 ## Prerequisites
 

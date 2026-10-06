@@ -1,5 +1,7 @@
 # Architecture
 
+See [domain decisions](DOMAIN_DECISIONS.md) for the recovered Sprint 0 model and HPMS-20 primitives.
+
 Hotel PMS 2.0 is an API-first modular monolith. Future business modules share one backend deployment while preserving domain boundaries; module implementations and cross-module contracts will be introduced with actual requirements.
 
 Dependency direction:
