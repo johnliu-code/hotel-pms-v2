@@ -1,6 +1,6 @@
 # Domain decisions
 
-This document records the recovered Sprint 0 domain decisions (HPMS-15/HPMS-16) and the implementation decisions for HPMS-20, HPMS-21, and HPMS-22. These are authoritative model boundaries; recording a concept does not implement it. Apply the [HPMS-18 development standards](../development/DEVELOPMENT_STANDARDS.md) and [HPMS-19 security/payment boundaries](../security/SECURITY_AND_PAYMENT_BOUNDARIES.md).
+This document records the recovered Sprint 0 domain decisions (HPMS-15/HPMS-16) and the implementation decisions for HPMS-20, HPMS-21, HPMS-22, and HPMS-23. These are authoritative model boundaries; recording a concept does not implement it. Apply the [HPMS-18 development standards](../development/DEVELOPMENT_STANDARDS.md) and [HPMS-19 security/payment boundaries](../security/SECURITY_AND_PAYMENT_BOUNDARIES.md).
 
 ## Recovered Sprint 0 decisions
 
@@ -26,7 +26,7 @@ This document records the recovered Sprint 0 domain decisions (HPMS-15/HPMS-16) 
 
 Money itself permits negative, zero, and positive decimal amounts; this sign behavior is decided by HPMS-20. Whether a specific domain use such as a room rate, deposit, refund, or adjustment permits negative values is a contextual invariant to be defined by the story introducing that concept.
 
-Supported currencies, currency-specific precision/rounding, reservation transition rules, and concrete UTC audit field representation/enforcement remain deferred. Do not infer them from these primitives.
+Supported currencies, currency-specific precision/rounding, and concrete UTC audit field representation/enforcement remain deferred. Do not infer them from these primitives.
 
 ## HPMS-21 implementation decisions
 
@@ -52,3 +52,16 @@ Supported currencies, currency-specific precision/rounding, reservation transiti
 - Persistent IDs and equality across materialized entities remain deferred to HPMS-24. No audit fields, active-state rules, or mutation workflows are added here.
 - Following HPMS-19 data minimization, no birth dates, identity documents, passport/government identifiers, demographic data, free-form personal notes, or raw payment-card credentials are introduced. Full card numbers, CVV/security codes, and similar sensitive payment credentials must not be stored on Customer, Guest, or ReservationGuest. A later payment-domain story may store provider-issued payment references/tokens and justified non-sensitive card metadata such as card brand or last four digits, subject to HPMS-19. No personal data is added to diagnostics or exception messages.
 - Domain remains persistence-, UI-, HTTP-, and provider-neutral with no new dependencies. Any further personal/contact fields, format rules, retention policies, and deletion rules require a validated workflow and explicit requirements.
+
+## HPMS-23 implementation decisions
+
+- Reservations.Reservation is a sealed aggregate with reference identity and no persistent ID. It requires non-null Property, RoomType, and Customer references. RoomType must reference the same Property instance. It books a RoomType, not a physical Room; RoomAssignment remains outside this story.
+- CheckInDate and CheckOutDate use System.DateOnly. Checkout is exclusive and must be strictly later than check-in. Stay dates and occupancy are fixed at construction; no amendment workflow is introduced.
+- Adults must be at least one; Children must be non-negative; their total must not exceed RoomType.OccupancyLimit. Summation uses a wider integer to prevent overflow bypassing the limit.
+- Guest associations are copied from optional construction input and exposed through a read-only collection. AddGuest accepts a non-null HPMS-22 ReservationGuest and rejects a second primary association before mutation. Zero primary guests is permitted. Customer and Guest remain distinct; the aggregate stores references rather than duplicated personal fields.
+- No unstated duplicate-guest, guest-count-versus-occupancy, active-property/type, or lifecycle-based guest editing rules are introduced. These require future approved workflow requirements.
+- New reservations start in Draft. TransitionTo allows exactly Draft -> Confirmed, Draft -> Cancelled, Confirmed -> CheckedIn, Confirmed -> Cancelled, CheckedIn -> CheckedOut. CheckedOut and Cancelled are terminal. Same-state, undefined-state, and all other transitions throw without changing state. No NoShow value is added.
+- New reservations are always Draft with a null confirmation number; the constructor accepts no confirmation number. Draft -> Confirmed requires a non-null/non-blank confirmation number, assigned during that transition. Confirmation input is accepted only when transitioning to Confirmed; later transitions retain it, including cancellation. No sequence, generator, global uniqueness, or persistence enforcement is introduced; those belong to HPMS-24.
+- EntryMethod contains exactly Manual, Import, Integration and rejects undefined enum input. Optional BookingChannelCode is a configurable/provider-neutral string independent of EntryMethod; no commercial-provider enum or registry is introduced. Optional Notes is plain text. Optional strings and confirmation numbers are preserved as supplied.
+- Cancellation changes lifecycle state and preserves the booking record and associations. No physical deletion behavior is implemented.
+- Persistent IDs/materialized-entity equality, confirmation uniqueness, availability, physical assignments, overlap/concurrency protection, and audit infrastructure remain deferred. HPMS-19 audit requirements apply when audit infrastructure is implemented; this slice adds no actor or timestamp fields. No persistence, HTTP/API, UI, provider SDK, or payment implementation/dependencies are introduced.
