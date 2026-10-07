@@ -4,7 +4,7 @@ Hotel PMS 2.0 is a modern, API-first Property Management System designed initial
 
 ## Goals and target users
 
-Build an API-first property management system for small and mid-sized hotels, motels, inns, and short-term rental operators. Future capabilities include reservations, availability, guest operations, housekeeping, billing, and multi-channel booking. HPMS-17 established the buildable foundation; HPMS-20 adds shared Domain primitives; HPMS-21 adds Property/RoomType/Room, and HPMS-22 separates booking-contact Customer, staying-person Guest, and ReservationGuest designation without implementing the Reservation aggregate or workflows.
+Build an API-first property management system for small and mid-sized hotels, motels, inns, and short-term rental operators. Future capabilities include reservations, availability, guest operations, housekeeping, billing, and multi-channel booking. HPMS-17 established the buildable foundation; HPMS-20 adds shared Domain primitives; HPMS-21 adds Property/RoomType/Room, and HPMS-22 separates booking-contact Customer, staying-person Guest, and ReservationGuest designation without implementing the Reservation aggregate or workflows. HPMS-23 adds the Reservation aggregate with DateOnly stays, occupancy/guest invariants, and guarded lifecycle transitions; physical assignments, availability, and persistence remain deferred.
 
 ## Architecture and technology
 
@@ -44,7 +44,7 @@ hotel-pms-v2/
 └── .gitignore
 ```
 
-`HotelPms.sln` contains the four backend projects and two test projects. MAUI and Web are built independently so backend development does not require native client workloads. Domain contains reservation lifecycle and room operational status types, immutable Money/Currency values, Property/RoomType/Room entities, and distinct Customer/Guest/ReservationGuest concepts; see the [domain decisions](docs/architecture/DOMAIN_DECISIONS.md). Application/Infrastructure contain no placeholder business classes. UnitTests exercises Money/Currency and entity invariants; IntegrationTests contains two API health/OpenAPI tests. Persistence and infrastructure tests will accompany actual implementations.
+`HotelPms.sln` contains the four backend projects and two test projects. MAUI and Web are built independently so backend development does not require native client workloads. Domain contains reservation lifecycle and room operational status types, immutable Money/Currency values, Property/RoomType/Room entities, distinct Customer/Guest/ReservationGuest concepts, and the Reservation aggregate and lifecycle rules introduced by HPMS-23; see the [domain decisions](docs/architecture/DOMAIN_DECISIONS.md). Application/Infrastructure contain no placeholder business classes. UnitTests exercises Money/Currency and entity invariants; IntegrationTests contains two API health/OpenAPI tests. Persistence and infrastructure tests will accompany actual implementations.
 
 ## Prerequisites
 
@@ -112,7 +112,7 @@ Future integrations with booking platforms, channel managers, and external PMS p
 
 ## Source control and secrets
 
-HPMS-17 work belongs on `feature/HPMS-17-solution-skeleton` and is reviewed before merging. Do not commit secrets, certificates, signing material, local environment files, or build outputs. Future server credentials should use user secrets or deployment secret storage; never embed credentials in either client.
+Use a dedicated feature branch for each Jira story and review changes through a pull request before merging into `main`. Do not commit secrets, certificates, signing material, local environment files, or build outputs. Future server credentials should use user secrets or deployment secret storage; never embed credentials in either client.
 
 See the [security and payment-data boundaries](docs/security/SECURITY_AND_PAYMENT_BOUNDARIES.md) for the backend security baseline, protected data, payment handling, and integration requirements.
 
