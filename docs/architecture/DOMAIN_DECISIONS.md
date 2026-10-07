@@ -1,6 +1,6 @@
 # Domain decisions
 
-This document records the recovered Sprint 0 domain decisions (HPMS-15/HPMS-16) and the implementation decisions for HPMS-20 and HPMS-21. These are authoritative model boundaries; recording a concept does not implement it. Apply the [HPMS-18 development standards](../development/DEVELOPMENT_STANDARDS.md) and [HPMS-19 security/payment boundaries](../security/SECURITY_AND_PAYMENT_BOUNDARIES.md).
+This document records the recovered Sprint 0 domain decisions (HPMS-15/HPMS-16) and the implementation decisions for HPMS-20, HPMS-21, and HPMS-22. These are authoritative model boundaries; recording a concept does not implement it. Apply the [HPMS-18 development standards](../development/DEVELOPMENT_STANDARDS.md) and [HPMS-19 security/payment boundaries](../security/SECURITY_AND_PAYMENT_BOUNDARIES.md).
 
 ## Recovered Sprint 0 decisions
 
@@ -41,3 +41,14 @@ Supported currencies, currency-specific precision/rounding, reservation transiti
 - Room accepts only defined HPMS-20 RoomOperationalStatus values (Ready and OutOfService). IsActive is independent of operational status. No occupancy, availability, housekeeping, or status-transition behavior is added.
 - Required names/codes reject null or whitespace. Optional text has no additional formatting rules. Active state and operational status are supplied explicitly rather than choosing business defaults.
 - Domain remains persistence-, HTTP-, UI-, and provider-neutral with no additional dependencies.
+
+## HPMS-22 implementation decisions
+
+- Customer is the booking contact / payer / contact profile; Guest is an actual staying person. They are separate sealed classes with get-only fields and reference identity, without inheritance or automatic linking.
+- The recovered model specifies roles but not scalar field lists. HPMS-22 uses a minimal implementation choice: Customer requires Name and has optional scalar Phone and Email, plus approved optional scalar AddressLine1, AddressLine2, City, Region, PostalCode, and CountryCode; Guest requires only Name. Names are single strings, permitting single names, international names, and booking-contact organization names without a first/last-name assumption.
+- Name rejects null/blank input and otherwise is preserved as supplied. Customer address/contact fields default to null and are preserved as supplied without address format or complex phone/email validation. Region is country-neutral; no Province/State fields, Address value object, country registry, or postal-code registry is introduced. Guest does not duplicate Customer address/contact fields.
+- Reservations.ReservationGuest holds a non-null Guest reference and an explicitly supplied IsPrimary designation. It stores no duplicated guest personal data. The designation belongs to the association, not to Guest globally.
+- HPMS-22 adds no Reservation aggregate, reservation reference/identifier, collection management, or lifecycle behavior. ReservationGuest is an association to be composed within the reservation context by HPMS-23. Reservation-wide uniqueness (including at most one primary guest) belongs to HPMS-23, not to individual associations.
+- Persistent IDs and equality across materialized entities remain deferred to HPMS-24. No audit fields, active-state rules, or mutation workflows are added here.
+- Following HPMS-19 data minimization, no birth dates, identity documents, passport/government identifiers, demographic data, free-form personal notes, or raw payment-card credentials are introduced. Full card numbers, CVV/security codes, and similar sensitive payment credentials must not be stored on Customer, Guest, or ReservationGuest. A later payment-domain story may store provider-issued payment references/tokens and justified non-sensitive card metadata such as card brand or last four digits, subject to HPMS-19. No personal data is added to diagnostics or exception messages.
+- Domain remains persistence-, UI-, HTTP-, and provider-neutral with no new dependencies. Any further personal/contact fields, format rules, retention policies, and deletion rules require a validated workflow and explicit requirements.
