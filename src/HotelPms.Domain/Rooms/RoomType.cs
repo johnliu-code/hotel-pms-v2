@@ -5,6 +5,7 @@ namespace HotelPms.Domain.Rooms;
 /// <summary>An accommodation type belonging to one property.</summary>
 public sealed class RoomType
 {
+    public Guid Id { get; private set; }
     public Property Property { get; }
     public string Code { get; }
     public string Name { get; }
@@ -20,6 +21,7 @@ public sealed class RoomType
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(occupancyLimit);
 
+        Id = Guid.NewGuid();
         Property = property;
         Code = code;
         Name = name;

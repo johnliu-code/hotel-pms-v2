@@ -3,6 +3,7 @@ namespace HotelPms.Domain.Customers;
 /// <summary>The booking contact or payer profile, distinct from an actual staying guest.</summary>
 public sealed class Customer
 {
+    public Guid Id { get; private set; }
     public string Name { get; }
     public string? Phone { get; }
     public string? Email { get; }
@@ -19,6 +20,8 @@ public sealed class Customer
         string? postalCode = null, string? countryCode = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
+
+        Id = Guid.NewGuid();
         Name = name;
         Phone = phone;
         Email = email;

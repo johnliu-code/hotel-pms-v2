@@ -5,6 +5,7 @@ namespace HotelPms.Domain.Rooms;
 /// <summary>A physical accommodation unit; operational status does not describe occupancy.</summary>
 public sealed class Room
 {
+    public Guid Id { get; private set; }
     public Property Property { get; }
     public RoomType RoomType { get; }
     public string Code { get; }
@@ -31,6 +32,7 @@ public sealed class Room
             throw new ArgumentOutOfRangeException(nameof(operationalStatus), "Unknown room operational status.");
         }
 
+        Id = Guid.NewGuid();
         Property = property;
         RoomType = roomType;
         Code = code;

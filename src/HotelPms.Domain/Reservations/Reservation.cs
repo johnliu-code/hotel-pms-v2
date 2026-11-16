@@ -9,6 +9,7 @@ public sealed class Reservation
 {
     private readonly List<ReservationGuest> _guests = [];
 
+    public Guid Id { get; private set; }
     public Property Property { get; }
     public RoomType RoomType { get; }
     public Customer Customer { get; }
@@ -51,6 +52,7 @@ public sealed class Reservation
             throw new ArgumentOutOfRangeException(nameof(entryMethod), "Unknown entry method.");
         }
 
+        Id = Guid.NewGuid();
         Property = property;
         RoomType = roomType;
         Customer = customer;

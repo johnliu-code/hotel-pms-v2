@@ -5,6 +5,7 @@ namespace HotelPms.Domain.Properties;
 /// <summary>A property with minimal address/contact details and a timezone identifier.</summary>
 public sealed class Property
 {
+    public Guid Id { get; private set; }
     public string Name { get; }
     public string TimeZoneId { get; }
     public Currency Currency { get; }
@@ -27,6 +28,7 @@ public sealed class Property
         ArgumentException.ThrowIfNullOrWhiteSpace(timeZoneId);
         ArgumentNullException.ThrowIfNull(currency);
 
+        Id = Guid.NewGuid();
         Name = name;
         TimeZoneId = timeZoneId;
         Currency = currency;
